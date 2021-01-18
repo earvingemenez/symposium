@@ -1,0 +1,15 @@
+*.pyc
+*.sqlite3
+*.DS_Store
+*local_settings.py
+*.log
+
+media/
+static/
+.vscode/
+*__pycache__/
+
+
+assets/css
+assets/fonts
+assets/images
