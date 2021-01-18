@@ -1,0 +1,35 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Tutorial</title>
+    <base href="/">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="{% static 'fe/dist/fe/styles.css' %}">
+
+</head>
+<body>
+  <app-root></app-root>
+
+
+  {% if not IS_PRODUCTION %}
+  <script type="text/javascript" src="{% static 'fe/dist/fe/runtime.js' %}"></script>
+  <script type="text/javascript" src="{% static 'fe/dist/fe/polyfills.js' %}"></script>
+  <script type="text/javascript" src="{% static 'fe/dist/fe/vendor.js' %}"></script>
+  <script type="text/javascript" src="{% static 'fe/dist/fe/main.js' %}"></script>
+  {% else %}
+  <script type="text/javascript" src="{% static 'fe/dist/fe/runtime-es5.js' %}"></script>
+  <script type="text/javascript" src="{% static 'fe/dist/fe/polyfills-es5.js' %}"></script>
+  <script type="text/javascript" src="{% static 'fe/dist/fe/vendor-es5.js' %}"></script>
+  <script type="text/javascript" src="{% static 'fe/dist/fe/main-es5.js' %}"></script>
+  {% endif %}
+</body>
+</html>
