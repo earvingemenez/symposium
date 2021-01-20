@@ -1,1 +1,10 @@
-<p>login works!</p>
+<form [formGroup]="Form.form" (ngSubmit)="onSubmit(Form.form)">
+    <p *ngIf="Form.isValid && formSubmitted && Form.httpstat === '400'">Invalid Credentials. Please Try Again.</p>
+    <p *ngIf="Form.isValid && formSubmitted && Form.httpstat === '500'">Something Went Wrong. Please Try Again.</p>
+
+    <span *ngIf="Form.hasError('email', 'required')">Email is required</span>
+    <span *ngIf="Form.hasError('email', 'email')">Email is not valid</span>
+    <input formControlName="email" type="text">
+    <input formControlName="password" type="password">
+    <button type="submit">Login</button>
+</form>

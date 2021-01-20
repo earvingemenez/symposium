@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoginComponent } from './login/login.component';
-import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
-  declarations: [LoginComponent, PagenotfoundComponent],
+  declarations: [LoginComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule
   ]
 })
 export class PublicModule { }

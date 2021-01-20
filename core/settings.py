@@ -29,7 +29,6 @@ IS_PRODUCTION = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'users',
+    'channels',
 ]
 
 MIDDLEWARE = [

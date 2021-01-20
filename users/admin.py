@@ -11,6 +11,7 @@ class TokenAdmin(admin.TabularInline):
     """
     model = Token
     readonly_fields = ('key', 'created')
+    extra = 0
 
 
 @admin.register(get_user_model())
@@ -22,7 +23,6 @@ class UserAdmin(BaseUserAdmin):
 
     filter_horizontal = ('groups', 'user_permissions')
     list_display = ('email', 'first_name', 'last_name', 'date_joined')
-    inlines = (TokenAdmin,)
 
     fieldsets = (
         (None, {
