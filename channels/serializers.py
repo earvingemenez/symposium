@@ -21,6 +21,7 @@ class MemberSerializer(ModelSerializer):
 
 
 class ChannelSerializer(ModelSerializer):
+    host = UserSerializer()
     members = serializers.SerializerMethodField()
 
     def get_members(self, instance):

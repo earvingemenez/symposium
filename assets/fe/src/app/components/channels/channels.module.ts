@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { ChannelsComponent } from './channels/channels.component';
 import { ChannelComponent } from './channel/channel.component';
 

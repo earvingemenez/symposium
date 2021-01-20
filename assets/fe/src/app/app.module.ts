@@ -10,6 +10,7 @@ import { TokenService } from './commons/services/users/interceptors/token.servic
 import { PublicModule } from './components/public/public.module';
 import { GlobalsModule } from './components/globals/globals.module';
 import { UsersModule } from './components/users/users.module';
+import { ChannelsModule } from './components/channels/channels.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { UsersModule } from './components/users/users.module';
     AppRouter,
     PublicModule,
     GlobalsModule,
-    UsersModule
+    UsersModule,
+    ChannelsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenService, multi: true }

@@ -1,1 +1,7 @@
-<p>channel works!asdasdasdas</p>
+<p>Channel: {{ channel.name }}</p>
+Members:
+<ul>
+    <li *ngFor="let member of channel.members">
+        {{ member.user.first_name }} {{ member.user.last_name }}
+    </li>
+</ul>
