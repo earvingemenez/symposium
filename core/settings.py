@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'users',
     'channels',
+    'users',
+    'symposiums',
 ]
 
 MIDDLEWARE = [
@@ -128,6 +129,23 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+# Channels
+# https://channels.readthedocs.io/en/stable/
+
+ASGI_APPLICATION = 'core.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": 'channels_redis.core.RedisChannelLayer',
+        "CONFIG": {
+            "hosts": [
+                ("localhost", 6379),
+            ]
+        }
+    }
+}
 
 
 # Static files (CSS, JavaScript, Images)

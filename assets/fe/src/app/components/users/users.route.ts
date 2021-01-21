@@ -1,15 +1,14 @@
-import { Routes, RouterModule } from '@angular/router';
-import { LoginRequiredService as LoginRequired } from '../../commons/services/users/interceptors/required.service';
+import { HeaderContent } from '../../commons/utils/layouts.util';
+import { LoginRequired } from '../../commons/utils/security.util';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 
-
-const routes: Routes = [
+export const USERS_ROUTES: Object[] = [
   {
-    path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [LoginRequired]
+    name: 'dashboard',
+    url: '/dashboard',
+    views: HeaderContent(DashboardComponent),
+    onEnter: LoginRequired
   }
 ]
-
-export const USERS_ROUTES = RouterModule.forChild(routes);
+;

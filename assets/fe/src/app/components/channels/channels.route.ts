@@ -1,22 +1,21 @@
-import { Routes, RouterModule } from '@angular/router';
-import { LoginRequiredService as LoginRequired } from '../../commons/services/users/interceptors/required.service';
+import { HeaderContent } from '../../commons/utils/layouts.util';
+import { LoginRequired } from '../../commons/utils/security.util';
 
 import { ChannelsComponent } from './channels/channels.component';
 import { ChannelComponent } from './channel/channel.component';
 
-
-const routes: Routes = [
+export const CHANNELS_ROUTES: Object[] = [
   {
-    path: 'channels',
-    component: ChannelsComponent,
-    canActivate: [LoginRequired],
-    
+    name: 'channels',
+    url: '/channels',
+    views: HeaderContent(ChannelsComponent),
+    onEnter: LoginRequired
   },
   {
-    path: 'channels/:id',
-    component: ChannelComponent,
-    canActivate: [LoginRequired]
+    name: 'channel',
+    url: '/channels/:id',
+    views: HeaderContent(ChannelComponent),
+    onEnter: LoginRequired
   }
 ]
-
-export const CHANNELS_ROUTES = RouterModule.forChild(routes);
+;

@@ -2,7 +2,10 @@
     <p>Welcome {{ user.first_name }}</p>
     <ul>
         <li>
-            <a [routerLink]="['/dashboard']" routerLinkActive="active">Dashboard</a>
+            <a uiSref="dashboard">Dashboard</a>
+        </li>
+        <li>
+            <a uiSref="logout">Logout</a>
         </li>
     </ul>
 </div>

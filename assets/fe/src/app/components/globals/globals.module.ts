@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { UIRouterModule } from '@uirouter/angular';
 
 import { HeaderComponent } from './header/header.component';
 
@@ -10,7 +10,7 @@ import { HeaderComponent } from './header/header.component';
   declarations: [HeaderComponent],
   imports: [
     CommonModule,
-    RouterModule
+    UIRouterModule
   ]
 })
 export class GlobalsModule { }
