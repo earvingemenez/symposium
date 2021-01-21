@@ -1,22 +1,19 @@
-import { Routes, RouterModule } from '@angular/router';
+import { ContentOnly } from '../../commons/utils/layouts.util';
 import { LoginComponent } from "./login/login.component";
+import { Logout } from '../../commons/utils/security.util';
 
-import { LogoutService } from '../../commons/services/users/interceptors/logout.service';
 
-
-const routes : Routes = [
+export const PUBLIC_ROUTES: Object[] = [
   {
-    path: 'login',
-    component: LoginComponent
+    name: 'login',
+    url: '/login',
+    views: ContentOnly(LoginComponent),
+    params: { next: (window as any).location.pathname }
   },
   {
-    // FIX THIS. crappy solution.
-    // find a solution that doesn't need
-    // to create a component.
-    path: 'logout',
-    component: LoginComponent,
-    canActivate: [LogoutService]
+    name: 'logout',
+    url: '/logout',
+    onEnter: Logout
   }
 ]
-
-export const PUBLIC_ROUTES = RouterModule.forChild(routes);
+;

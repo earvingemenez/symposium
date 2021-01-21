@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UIRouterModule } from '@uirouter/angular';
 
 import { LoginComponent } from './login/login.component';
 
@@ -9,7 +10,8 @@ import { LoginComponent } from './login/login.component';
   declarations: [LoginComponent],
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    UIRouterModule
   ]
 })
 export class PublicModule { }

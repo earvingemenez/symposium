@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { StateService } from '@uirouter/angular';
 
 import { Login } from '../../../commons/models/users.model';
 import { LoginForm } from '../../../commons/forms/users.form';
 
 import { AuthService } from '../../../commons/services/users/auth.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +18,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private router: Router
+    private state: StateService
   ) {
     this.Form = new LoginForm();
   }
@@ -31,7 +30,7 @@ export class LoginComponent implements OnInit {
 
     if (valid) {
       this.auth.login(value)
-        .then((resp) => this.router.navigate(['/dashboard']))
+        .then((resp) => this.state.go('dashboard'))
         .catch((err: any) => {
           this.Form.httpstat = err.status;
         })

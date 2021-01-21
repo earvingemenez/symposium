@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { StateService } from '@uirouter/angular';
 
 import { ChannelService } from '../../../commons/services/channels/channel.service';
 import { Channel } from '../../../commons/models/channels.model';
@@ -15,14 +15,12 @@ export class ChannelComponent implements OnInit {
   channel = {} as Channel;
 
   constructor(
-    private route: ActivatedRoute,
+    private state: StateService,
     private chan: ChannelService
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-
-    this.chan.getChannel(id)
+    this.chan.getChannel(this.state.params.id)
       .then((resp: any) => {
         this.channel = resp as Channel;
       })

@@ -2,8 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AppRouter } from './app.route';
-import { AppComponent } from './app.component';
+import { UIRouterModule } from '@uirouter/angular';
 
 import { TokenService } from './commons/services/users/interceptors/token.service';
 
@@ -11,6 +10,10 @@ import { PublicModule } from './components/public/public.module';
 import { GlobalsModule } from './components/globals/globals.module';
 import { UsersModule } from './components/users/users.module';
 import { ChannelsModule } from './components/channels/channels.module';
+
+import { AppComponent } from './app.component';
+import { APP_ROUTES } from './app.route';
+
 
 
 @NgModule({
@@ -20,7 +23,7 @@ import { ChannelsModule } from './components/channels/channels.module';
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRouter,
+    UIRouterModule.forRoot(APP_ROUTES),
     PublicModule,
     GlobalsModule,
     UsersModule,

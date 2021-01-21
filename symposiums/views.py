@@ -1,7 +1,11 @@
+import json
+
 from django.shortcuts import get_object_or_404
 
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
+
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from .serializers import MemberSerializer, ChannelSerializer
 
@@ -23,3 +27,7 @@ class Channel(ViewSet):
             )
         )
         return Response(serializer.data, status=200)
+
+
+class Session(AsyncJsonWebsocketConsumer):
+    pass
