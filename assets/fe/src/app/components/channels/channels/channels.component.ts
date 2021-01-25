@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { StateService } from '@uirouter/angular';
+
+import { ChannelService } from '../../../commons/services/channels/channel.service';
+import { Channel } from '../../../commons/models/channels.model';
+
 
 @Component({
   selector: 'app-channels',
@@ -7,10 +12,19 @@ import { Component, OnInit } from '@angular/core';
   ]
 })
 export class ChannelsComponent implements OnInit {
+  channels = [] as Channel[];
 
-  constructor() { }
+  constructor(
+    private state: StateService,
+    private chan: ChannelService
+  ) { }
 
   ngOnInit(): void {
+    this.chan.getChannels()
+      .then((resp: any) => {
+        this.channels = resp as Channel[];
+      })
+    ;
   }
 
 }

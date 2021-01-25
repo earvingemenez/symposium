@@ -43,11 +43,7 @@ export class AuthService {
     if(
       Object.keys(this.#user).length === 0
     ) {
-      this._fetch_user()
-        .catch((err: any) => {
-
-        })
-      ;
+      this._fetch_user();
       return this.#user;
     }
     return this.#user;

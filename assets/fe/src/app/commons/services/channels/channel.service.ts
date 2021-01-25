@@ -20,4 +20,10 @@ export class ChannelService {
     ;
   }
 
+  getChannels() {
+    return this.http.get(API_CHANNELS)
+      .toPromise()
+    ;
+  }
+
 }
