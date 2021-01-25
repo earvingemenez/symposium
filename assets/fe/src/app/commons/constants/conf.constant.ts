@@ -6,3 +6,7 @@ export const AUTH_KEY = 'V5fUxpXUAXuguGqY2t';
 /* API url
  */
 export const API_URL = '/api/';
+
+/* HOST
+ */
+export const HOST = `${(window as any).location?.host}`;

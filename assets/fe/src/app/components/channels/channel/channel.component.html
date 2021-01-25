@@ -1,7 +1,17 @@
 <p>Channel: {{ channel.name }}</p>
+<button (click)="connect()">Join Room</button>
+
 Members:
 <ul>
     <li *ngFor="let member of channel.members">
         {{ member.user.first_name }} {{ member.user.last_name }}
     </li>
 </ul>
+
+<div #sc class="st-container">
+    <!-- Stream Container -->
+</div>
+
+<div class="st-controls">
+
+</div>
