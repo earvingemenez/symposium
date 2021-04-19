@@ -1,17 +1,21 @@
-<p>Channel: {{ channel.name }}</p>
-<button (click)="connect()">Join Room</button>
+<div class="container my-5">
+    <div *ngIf="!hasMedia" class="text-center">
+       <h2 class="font-weight-bold">{{ channel.name }}</h2>
+       <button class="btn btn-primary my-3" (click)="connect()">Join Room</button>
 
-Members:
-<ul>
-    <li *ngFor="let member of channel.members">
-        {{ member.user.first_name }} {{ member.user.last_name }}
-    </li>
-</ul>
+       <div class="text-left py-4">
+           <span class="font-weight-bold">Members:</span>
+            <ul>
+                <li *ngFor="let member of channel.members">
+                    {{ member.user.first_name }} {{ member.user.last_name }}
+                </li>
+            </ul>
+       </div>
+    </div>
+    
+    <div #sc class="st-container d-flex">
+    </div>
 
-<div #sc class="st-container">
-    <!-- Stream Container -->
-</div>
-
-<div class="st-controls">
-
+    <div class="st-controls">
+    </div>
 </div>

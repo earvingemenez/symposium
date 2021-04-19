@@ -47,58 +47,89 @@ export class ChannelComponent implements OnInit {
     ;
   }
 
-  async connect() {
-    // establish the connection to the session (via socket)
-    this.session.connect(this.#channelId);
-    // send signal
-    this.session.send("request-offer", this.auth.user.id);
-
-    this.session.stream
-      .pipe()
-      .subscribe((msg: any) => {
-
-        switch(msg.type) {
-          case 'request-offer': {
-            this.createOffer(msg.user.uid);
-            break;
-          }
-          case 'video-offer': {
-            console.log('handleAnswerCall');
-            break;
-          }
-          case 'answer-sdp-call': {
-            this.getPC(msg.user.uid  )
-              .setRemoteDescription(msg.sdp)
-            ;
-            break;
-          }
-          case 'new-ice-candidate': {
-            this.handleCandidateMessage(msg);
-            break;
-          }
-          case 'controls-update': {
-            this.updateStream(msg);
-            break;
-          }
-          case 'hang-up': {
-            this.endStream(msg.user.uid, this.getPC(msg.user.uid));
-          }
-        }
-      });
-
+  get hasMedia() {
+    return this.#media.active;
   }
 
-  private async createOffer(peerUID: any) {
-    let pc = this.createPC(peerUID);
+  async connect() {
+    const userID = this.auth.user.id;
+    // establish the connection to the session (via socket)
+    this.session.connect(this.#channelId);
 
+    // create stream
     this.#media = await navigator.mediaDevices.getUserMedia({
       video: true, audio: true
     });
     this.createStream(this.#media, this.auth.user.id);
 
+    // send signal
+    this.session.send("request-offer", userID);
+
+    this.session.stream
+      .pipe()
+      .subscribe((msg: any) => {
+        if(userID !== msg.user.uid) {
+          switch(msg.type) {
+            case 'request-offer': {
+              this.createOffer(msg.user.uid);
+              break;
+            }
+            case 'video-offer': {
+              this.handleOffer(msg);
+              break;
+            }
+            case 'answer-sdp-call': {
+              this.getPC(msg.user.uid)
+                .setRemoteDescription(msg.sdp)
+              ;
+              break;
+            }
+            case 'new-ice-candidate': {
+              this.handleCandidateMessage(msg);
+              break;
+            }
+            case 'controls-update': {
+              this.updateStream(msg);
+              break;
+            }
+            case 'hang-up': {
+              this.endStream(msg.user.uid, this.getPC(msg.user.uid));
+            }
+          }
+        }
+      });
+  }
+
+  private async createOffer(peerUID: any) {
+    let pc = await this.createPC(peerUID);
+
     this.#media.getTracks().forEach(track => {
       pc.addTrack(track, this.#media);
     })
+  }
+
+  private async handleOffer(msg: any) {
+    const offer = new RTCSessionDescription(msg.sdp);
+    const peerUID = msg.user.uid;
+    
+    // create peer connection
+    this.createPC(peerUID);
+    const pc = this.getPC(peerUID);
+
+    // set offer sdp as remote sdp
+    await pc.setRemoteDescription(offer);
+
+    // add local stream to the RTCPeerConnection
+    this.#media.getTracks().forEach(track =>
+      pc.addTrack(track, this.#media)
+    );
+
+    // create answer sdp
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+
+    // send answer back to the caller
+    this.session.send("answer-sdp-call", this.auth.user.id, peerUID, null, answer);
   }
 
   private handleCandidateMessage(msg: any) {
@@ -131,7 +162,6 @@ export class ChannelComponent implements OnInit {
   /* get a specific peer connection
    */
   private getPC(peerUID: any) {
-    console.log(this.#connections);
     return this.#connections
       .find(i => i.peerUID === peerUID).peer;
   }
@@ -159,7 +189,6 @@ export class ChannelComponent implements OnInit {
    */
   private async handleNegoNeeded(peerUID: any) {
     const pc = this.getPC(peerUID);
-    console.log(peerUID, pc);
     const offer = await pc.createOffer();
     
     await pc.setLocalDescription(offer);
@@ -184,9 +213,10 @@ export class ChannelComponent implements OnInit {
 
       const el = this.renderer.createElement('div');
       el.id = `streamer-${peerUID}`;
-      el.classList.add('stream-video');
+      el.classList.add('stream-video', 'bg-dark', 'col-lg-6');
 
       const vid = this.renderer.createElement('video');
+      vid.classList.add('w-100', 'h-100');
       vid.id = `${peerUID}`;
       vid.srcObject = stream;
       vid.play();

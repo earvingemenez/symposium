@@ -1,14 +1,25 @@
-<div>
-    <p>Welcome {{ user.first_name }}</p>
-    <ul>
-        <li>
+<nav class="navbar navbar-light bg-light">
+    <span class="font-weight-bold">Welcome {{ user.first_name }}</span>
+    <!-- <ul class="list-group">
+        <li class="">
             <a uiSref="dashboard">Dashboard</a>
         </li>
-        <li>
+        <li class="">
             <a uiSref="channels">My Channels</a>
         </li>
-        <li>
+        <li class="">
             <a uiSref="logout">Logout</a>
         </li>
-    </ul>
-</div>
+    </ul> -->
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link" uiSref="dashboard">Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" uiSref="channels">My Channels</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" uiSref="logout">Logout</a>
+        </li>
+      </ul>
+</nav>

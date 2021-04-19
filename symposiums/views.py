@@ -1,6 +1,7 @@
 import json
 
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
@@ -32,8 +33,10 @@ class Channels(ViewSet, SerializerProperty):
     serializer_class = ChannelSerializer
 
     def get(self, request):
+        chan_ids = self.request.user.member_set.all().values_list('channel', flat=True)
+
         serializer = self.serializer_class(
-            self._model.objects.filter(host=request.user),
+            self._model.objects.filter(Q(host=request.user) | Q(id__in=chan_ids)),
             many=True
         )
         return Response(serializer.data, status=200)
