@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { StateService } from '@uirouter/angular';
 
 import { AuthService } from '../../../commons/services/users/auth.service';
@@ -6,7 +6,14 @@ import { StreamService } from '../../../commons/services/channels/stream.service
 import { ChannelService } from '../../../commons/services/channels/channel.service';
 
 import { Channel } from '../../../commons/models/channels.model';
-import { PipeCollector } from '@angular/compiler/src/template_parser/binding_parser';
+
+import {
+  faMicrophone,
+  faMicrophoneSlash,
+  faVideo,
+  faVideoSlash,
+  faPhoneSlash
+} from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -15,7 +22,7 @@ import { PipeCollector } from '@angular/compiler/src/template_parser/binding_par
   styles: [
   ]
 })
-export class ChannelComponent implements OnInit {
+export class ChannelComponent implements OnInit, OnDestroy {
 
   @ViewChild('sc', { static: false }) sc?: ElementRef;
   @ViewChild('peerstream', { static: false }) peerstream?: ElementRef;
@@ -24,6 +31,18 @@ export class ChannelComponent implements OnInit {
   #medialist = new Array();
   #connections = new Array();
   #channelId: string;
+
+  controls = {
+    video: true,
+    audio: true,
+  }
+
+  // icons
+  faMicrophone = faMicrophone;
+  faMicrophoneSlash = faMicrophoneSlash;
+  faVideo = faVideo;
+  faVideoSlash = faVideoSlash;
+  faPhoneSlash = faPhoneSlash;
 
 
   channel = {} as Channel;
@@ -47,6 +66,10 @@ export class ChannelComponent implements OnInit {
     ;
   }
 
+  ngOnDestroy(): void {
+    this.hangUp();
+  }
+
   get hasMedia() {
     return this.#media.active;
   }
@@ -60,7 +83,7 @@ export class ChannelComponent implements OnInit {
     this.#media = await navigator.mediaDevices.getUserMedia({
       video: true, audio: true
     });
-    this.createStream(this.#media, this.auth.user.id);
+    this.createStream(this.#media, userID);
 
     // send signal
     this.session.send("request-offer", userID);
@@ -86,10 +109,6 @@ export class ChannelComponent implements OnInit {
             }
             case 'new-ice-candidate': {
               this.handleCandidateMessage(msg);
-              break;
-            }
-            case 'controls-update': {
-              this.updateStream(msg);
               break;
             }
             case 'hang-up': {
@@ -219,6 +238,7 @@ export class ChannelComponent implements OnInit {
       vid.classList.add('w-100', 'h-100');
       vid.id = `${peerUID}`;
       vid.srcObject = stream;
+      vid.muted = (peerUID === this.auth.user.id);
       vid.play();
 
       this.renderer.appendChild(el, vid);
@@ -227,22 +247,35 @@ export class ChannelComponent implements OnInit {
     }
   }
 
-  private updateStream(msg: any) {
-    const video = (Document as any).getElementById(msg.usr.uid);
-    
-    if(video) {
-      video.style.display = msg.controls.video ? 'block': 'none';
-    }
-  }
-
   private endStream(peerUID: any, pc: any) {
     const el = document.getElementById(`streamer-${peerUID}`);
-    
+
     pc.onicecandidate = null;
     pc.ontrack = null;
     pc.onnegotiationneeded = null;
 
+    this.#connections = this.#connections.filter(pc => pc.peerUID !== peerUID);
     el?.remove();
   }
 
+  handleVideoToggle() {
+    this.controls.video = !this.controls.video;
+    this.#media.getVideoTracks()[0].enabled = this.controls.video;
+  }
+
+  handleAudioToggle() {
+    this.controls.audio = !this.controls.audio;
+    this.#media.getAudioTracks()[0].enabled = this.controls.audio;
+  }
+
+  hangUp() {
+    const userID = this.auth.user.id
+    this.session.send("hang-up", userID);
+
+    // stop access user media
+    this.#media.getTracks().forEach(track => track.stop());
+
+    // redirect page
+    this.state.go('channels');
+  }
 }
